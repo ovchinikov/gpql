@@ -96,7 +96,32 @@ const resolvers = {
       return Book.find({}).populate('author');
     },
     allAuthors: async () => {
-      return Author.find({});
+      const authors = await Author.aggregate([
+        {
+          $lookup: {
+            from: 'books', // the name of the books collection
+            localField: '_id',
+            foreignField: 'author',
+            as: 'books',
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            born: 1,
+            bookCount: { $size: '$books' },
+          },
+        },
+      ]);
+      console.log(authors);
+
+      return authors.map((author) => ({
+        id: author._id,
+        name: author.name,
+        born: author.born,
+        bookCount: author.bookCount,
+      }));
     },
     me: async (roots, args, { currentUser }) => {
       return currentUser;
