@@ -25,6 +25,7 @@ const CreateBook = () => {
   const handleSumbit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createBook({ variables: { title, author, published, genres } });
+
     e.currentTarget.reset();
     setGenres([]);
   };

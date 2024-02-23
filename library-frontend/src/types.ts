@@ -9,5 +9,6 @@ export type Book = {
   id: string;
   title: string;
   published: number;
-  author: string;
+  author: Author;
+  genres: string[];
 };
